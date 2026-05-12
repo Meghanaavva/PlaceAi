@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // Proxy /api calls to backend during development
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://placeai-hcio.onrender.com',
         changeOrigin: true,
       }
     }
