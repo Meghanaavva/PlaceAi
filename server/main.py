@@ -32,8 +32,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         settings.FRONTEND_URL,
-        "http://localhost:5173",
-        "http://localhost:3000",
+        "https://place-ai-omega.vercel.app/",
+        "https://placeai-hcio.onrender.com",
         "https://*.vercel.app",   # Allow Vercel deployments
     ],
     allow_credentials=True,
