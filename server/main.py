@@ -32,7 +32,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://place-ai-omega.vercel.app"
+        "https://place-6fk5jyjfj-avva-meghanas-projects.vercel.app"
         
                 
     ],
