@@ -31,10 +31,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        settings.FRONTEND_URL,
-        "https://place-ai-omega.vercel.app/",
-        "https://placeai-hcio.onrender.com",
-        "https://*.vercel.app",   # Allow Vercel deployments
+        "http://localhost:5173",
+        "https://place-ai-omega.vercel.app"
+        
+                
     ],
     allow_credentials=True,
     allow_methods=["*"],

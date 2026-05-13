@@ -4,7 +4,7 @@ import axios from 'axios'
 const BASE_URL = import.meta.env.VITE_API_URL || ''
 
 const client = axios.create({
-  baseURL: "https://placeai-hcio.onrender.com",
+  baseURL: `${BASE_URL}/api`,
   timeout: 90000, // 90s — AI calls can take time
 })
 
