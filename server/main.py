@@ -5,7 +5,6 @@ from contextlib import asynccontextmanager
 from database import engine, Base
 from config import settings
 
-# Import all models so SQLAlchemy creates tables
 import models  # noqa: F401
 
 from routers import auth, resume, jobs, chat, interview
@@ -27,21 +26,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — allow frontend to call the API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://place-6fk5jyjfj-avva-meghanas-projects.vercel.app"
-        
-                
+        "https://place-ai-omega.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Register all routers under /api
 app.include_router(auth.router,      prefix="/api")
 app.include_router(resume.router,    prefix="/api")
 app.include_router(jobs.router,      prefix="/api")
@@ -61,5 +56,4 @@ def root():
 
 @app.get("/api/health")
 def health():
-    """Health check endpoint for deployment monitoring."""
     return {"status": "ok", "message": "PlaceAI API is healthy"}
