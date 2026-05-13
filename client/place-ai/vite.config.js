@@ -6,10 +6,20 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // Proxy /api calls to backend during development
       '/api': {
         target: 'https://placeai-hcio.onrender.com',
         changeOrigin: true,
+      }
+    }
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          axios: ['axios'],
+        }
       }
     }
   }
