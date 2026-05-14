@@ -12,7 +12,6 @@ from routers import auth, resume, jobs, chat, interview
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Create database tables on startup."""
     Base.metadata.create_all(bind=engine)
     print("[PlaceAI] Database tables created/verified ✓")
     yield
@@ -21,17 +20,26 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="PlaceAI — Placement Assistant API",
-    description="AI-powered placement assistant with resume analysis, job matching, and career coaching",
+    description="AI-powered placement assistant",
     version="1.0.0",
     lifespan=lifespan,
 )
 
+# ✅ Explicit origins instead of wildcard
+origins = [
+    "https://place-kcxjjzfnu-avva-meghanas-projects.vercel.app",
+    "https://*.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=origins,         # ✅ explicit list, not ["*"]
+    allow_credentials=True,        # ✅ changed to True
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],          # ✅ add this
 )
 
 app.include_router(auth.router,      prefix="/api")
