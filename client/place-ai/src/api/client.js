@@ -1,14 +1,12 @@
 import axios from 'axios'
-
-// Base URL — uses Vite proxy in dev, env var in production
-const BASE_URL = import.meta.env.VITE_API_URL || ''
-
+ 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://placeai-hcio.onrender.com'
+ 
 const client = axios.create({
   baseURL: `${BASE_URL}/api`,
-  timeout: 90000, // 90s — AI calls can take time
+  timeout: 90000,
 })
-
-// Attach JWT token to every request
+ 
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
@@ -16,8 +14,7 @@ client.interceptors.request.use((config) => {
   }
   return config
 })
-
-// Handle 401 globally — redirect to login
+ 
 client.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -29,33 +26,58 @@ client.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-// ── API methods ────────────────────────────────────────────────
-
+ 
 export const api = {
   // Auth
-  register: (data)        => client.post('/auth/register', data),
-  login:    (data)        => client.post('/auth/login', data),
-  getMe:    ()            => client.get('/auth/me'),
-
+  register: (data) => client.post('/auth/register', data),
+  login:    (data) => client.post('/auth/login', data),
+  getMe:    ()     => client.get('/auth/me'),
+ 
   // Resume
-  uploadResume:  (formData) => client.post('/resume/upload', formData, {
+  uploadResume: (formData) => client.post('/resume/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
-  getMyResume:   ()         => client.get('/resume/my'),
-  deleteResume:  ()         => client.delete('/resume/my'),
-  buildPdf:      (data)     => client.post('/resume/build-pdf', data, { responseType: 'blob' }),
-  analyzeText:   (text)     => client.post('/resume/analyze-text', { text }),
-
+  getMyResume:  ()     => client.get('/resume/my'),
+  deleteResume: ()     => client.delete('/resume/my'),
+  buildPdf:     (data) => client.post('/resume/build-pdf', data, { responseType: 'blob' }),
+  analyzeText:  (text) => client.post('/resume/analyze-text', { text }),
+ 
   // Jobs
   getJobRecommendations: ()           => client.get('/jobs/recommendations'),
   getSkillGap:           (targetRole) => client.post('/jobs/skill-gap', { target_role: targetRole }),
-
+ 
   // Chat
   chat: (messages) => client.post('/chat/', { messages }),
-
+ 
   // Interview
   getInterviewQuestions: () => client.get('/interview/questions'),
+ 
+  // Mock Interview
+  startMockInterview:    (data)      => client.post('/mock-interview/start', data),
+  submitMockAnswer:      (data)      => client.post('/mock-interview/answer', data),
+  completeMockInterview: (sessionId) => client.post(`/mock-interview/complete/${sessionId}`),
+  getMockHistory:        ()          => client.get('/mock-interview/history'),
+  getMockSession:        (id)        => client.get(`/mock-interview/session/${id}`),
+ 
+  // Application Tracker
+  getApplications:   ()         => client.get('/applications/'),
+  createApplication: (data)     => client.post('/applications/', data),
+  updateApplication: (id, data) => client.patch(`/applications/${id}`, data),
+  deleteApplication: (id)       => client.delete(`/applications/${id}`),
+ 
+  // Roadmap
+  generateRoadmap: (data) => client.post('/roadmap/generate', data),
+  getMyRoadmaps:   ()     => client.get('/roadmap/my'),
+  deleteRoadmap:   (id)   => client.delete(`/roadmap/${id}`),
+ 
+  // Cover Letter
+  generateCoverLetter: (data) => client.post('/cover-letter/generate', data),
+ 
+  // Job Search
+  searchJobs: (query, location) => client.get('/job-search/search', {
+    params: { query, location }
+  }),
 }
-
+ 
 export default client
+ 
