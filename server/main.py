@@ -30,7 +30,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "*",
+        "https://place-ai-omega.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
